@@ -1,11 +1,13 @@
 import Earthquakes from './Earthquakes';
+import { Analytics } from '@vercel/analytics/react';
 
 function App() {
   return (
-    <div>
-      <Earthquakes/>
-    </div>
+    <>
+      <Earthquakes />
+      <Analytics />
+    </>
   );
 }
 
-export default App
+export default App;
