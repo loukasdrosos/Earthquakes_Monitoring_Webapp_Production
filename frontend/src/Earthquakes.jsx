@@ -85,9 +85,6 @@ function Earthquakes() {
             
             url = url.slice(0, -1);  // Remove trailing '&' or '?'
 
-            console.log("VITE_API_URL:", baseUrl);
-            console.log("Earthquakes request URL:", url);
-
             const response = await axios.get(url);
 
             if (clusterRef.current) {
