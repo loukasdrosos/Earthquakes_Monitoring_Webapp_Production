@@ -26,9 +26,9 @@ coverage.xml
 # SQLite (development database)
 db.sqlite3
 
-# Media & static files
-media/
-staticfiles/
+# Backend local files
+backend/db.sqlite3
+backend/staticfiles/
 
 # Virtual environments
 venv/
@@ -42,8 +42,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-package-lock.json
-yarn.lock
 
 # VSCode - Windows system files
 .vscode/
@@ -61,3 +59,10 @@ ehthumbs.db
 .env
 .env.*
 !.env.example
+
+# Frontend builds
+dist/
+frontend/dist/
+build/
+frontend/build/
+frontend/node_modules/

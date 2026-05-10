@@ -1,3 +1,7 @@
+from django.conf import settings
+from .services import fetch_and_save_earthquakes_from_xml
+from rest_framework.decorators import api_view
+from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -15,7 +19,7 @@ class EarthquakeViewSet(viewsets.ModelViewSet):
 
     # Return the queryset with applied filters
     def get_queryset(self):
-        queryset = Earthquake.objects.using('default').all()
+        queryset = Earthquake.objects.all()
         params = self.request.query_params
 
         return apply_filters(queryset, params)
@@ -38,7 +42,7 @@ class EarthquakeStatsView(APIView):
     """
 
     def get(self, request):
-        queryset = Earthquake.objects.using("default").all()
+        queryset = Earthquake.objects.all()
         params = request.GET
 
         # Apply all filters (date + others)
@@ -131,5 +135,41 @@ class EarthquakeStatsView(APIView):
             "has_results": True,
             "filtered_stats": filtered_stats,
         })
+    
+@api_view(["GET", "POST"])
+def update_earthquakes(request):
+    token = request.headers.get("X-Cron-Secret") or request.GET.get("token")
+
+    if not settings.CRON_SECRET:
+        return Response(
+            {"detail": "CRON_SECRET is not configured on the server."},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+
+    if token != settings.CRON_SECRET:
+        return Response(
+            {"detail": "Unauthorized."},
+            status=status.HTTP_401_UNAUTHORIZED,
+        )
+
+    try:
+        result = fetch_and_save_earthquakes_from_xml()
+    except Exception as exc:
+        return Response(
+            {
+                "status": "error",
+                "detail": str(exc),
+            },
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+
+    return Response({
+        "status": "success",
+        "created": result["created"],
+        "existing": result["existing"],
+        "error_count": len(result["errors"]),
+        "errors": result["errors"][:10],
+    })
+    
     
   

@@ -85,6 +85,9 @@ function Earthquakes() {
             
             url = url.slice(0, -1);  // Remove trailing '&' or '?'
 
+            console.log("VITE_API_URL:", baseUrl);
+            console.log("Earthquakes request URL:", url);
+
             const response = await axios.get(url);
 
             if (clusterRef.current) {
@@ -100,7 +103,12 @@ function Earthquakes() {
                 setMarkerZoom(true);
             }
         } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error("Error fetching data:", {
+                message: error.message,
+                url: error.config?.url,
+                status: error.response?.status,
+                data: error.response?.data,
+            });
             setError(error);
         } finally {
             setLoading(false);

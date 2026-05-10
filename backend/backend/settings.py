@@ -12,19 +12,14 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
-import pymysql
 from dotenv import load_dotenv
-import warnings
-import logging
-
-# Load environment variables from .env file
-load_dotenv()
-
-logger = logging.getLogger(__name__)
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from .env file
+load_dotenv(BASE_DIR / ".env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -53,14 +48,16 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -86,83 +83,13 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-'''
 DATABASES = {
-    'default': {
-        'ENGINE': os.getenv('MYSQL_DB_ENGINE'),
-        'NAME': os.getenv('MYSQL_DB_NAME'),
-        'USER': os.getenv('MYSQL_DB_USER'),
-        'PASSWORD': os.getenv('MYSQL_DB_PASSWORD'),
-        'HOST': os.getenv('MYSQL_DB_HOST', 'localhost'),
-        'PORT': os.getenv('MYSQL_DB_PORT', '3306'),
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-        },
-    },
-    'dbsqlite3': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.getenv('SQLITE_PATH', BASE_DIR / 'db.sqlite3'),
-    },
+    "default": dj_database_url.config(
+        default=os.getenv("DATABASE_URL", f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
+        conn_max_age=600,
+        ssl_require=os.getenv("DB_SSL_REQUIRE", "False") == "True",
+    )
 }
-'''
-
-# Function to safely convert .env boolean values
-def str_to_bool(value):
-    return str(value).strip().lower() in ("true")
-
-# Try connecting to MySQL database
-def mysql_connection_available():
-    try:
-        conn = pymysql.connect(
-            host=os.getenv('MYSQL_DB_HOST', 'localhost'),
-            user=os.getenv('MYSQL_DB_USER'),
-            password=os.getenv('MYSQL_DB_PASSWORD'),
-            database=os.getenv('MYSQL_DB_NAME'),
-            port=int(os.getenv('MYSQL_DB_PORT', 3306)),
-            connect_timeout=3
-        )
-        conn.close()
-        return True
-    except Exception as e:
-        logger.warning("MySQL check failed: %s", e)
-        return False
-    
-# Decide database type
-use_sqlite = str_to_bool(os.getenv("USE_SQLITE3", False))
-
-# Databases setup
-if use_sqlite:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.getenv('SQLITE_PATH', BASE_DIR / 'db.sqlite3'),
-        }
-    }
-    warnings.warn("🔹 USE_SQLITE3=True → Using SQLite as default database.")
-else:
-    if mysql_connection_available():
-        DATABASES = {
-            'default': {
-                'ENGINE': os.getenv('MYSQL_DB_ENGINE', 'django.db.backends.mysql'),
-                'NAME': os.getenv('MYSQL_DB_NAME'),
-                'USER': os.getenv('MYSQL_DB_USER'),
-                'PASSWORD': os.getenv('MYSQL_DB_PASSWORD'),
-                'HOST': os.getenv('MYSQL_DB_HOST', 'localhost'),
-                'PORT': os.getenv('MYSQL_DB_PORT', '3306'),
-                'OPTIONS': {
-                    'charset': 'utf8mb4',
-                },
-            }
-        }
-        warnings.warn("✅ Connected to MySQL database.")
-    else:
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': os.getenv('SQLITE_PATH', BASE_DIR / 'db.sqlite3'),
-            }
-        }
-        warnings.warn("⚠️ MySQL unavailable — using SQLite fallback.")
     
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -197,7 +124,14 @@ USE_I18N = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -206,4 +140,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS Configuration
 
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
+CORS_ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv(
+        "CORS_ALLOWED_ORIGINS",
+        "http://localhost:3000,http://localhost:5173"
+    ).split(",")
+    if origin.strip()
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
+    if origin.strip()
+]
+
+CRON_SECRET = os.getenv("CRON_SECRET")
