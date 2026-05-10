@@ -1,5 +1,9 @@
 # Real-Time Seismic Activity Monitoring Web Application
 
+## Live Demo
+
+https://earthquakes-monitoring-webapp.vercel.app
+
 ## Overview
 
 This is a full-stack web application for monitoring and visualizing earthquake activity in Greece.
