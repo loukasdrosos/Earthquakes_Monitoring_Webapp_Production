@@ -273,4 +273,215 @@ body {
   border-color: #aaa;
 }
 
+/* ==============================
+   Mobile layout
+   ============================== */
+
+@media (max-width: 768px) {
+  html,
+  body,
+  #root {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  body {
+    overflow: auto;
+  }
+
+  .earthquakes-layout {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* Reset desktop absolute sidebar behavior */
+  .earthquakes-list {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: auto;
+    max-height: none;
+    order: 1;
+    transform: none !important;
+    opacity: 1 !important;
+    overflow: visible;
+    box-shadow: none;
+    z-index: 1;
+  }
+
+  .earthquakes-layout.sidebar-closed .earthquakes-list {
+    display: none;
+  }
+
+  .earthquakes-layout.sidebar-closed .earthquakes-list > * {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Map becomes a normal section, not a full-screen background */
+  .earthquakes-map {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    height: 45vh;
+    min-height: 360px;
+    order: 2;
+    z-index: 1;
+  }
+
+  .earthquakes-map::after {
+    display: none;
+  }
+
+  /* Stats becomes a normal mobile section */
+  .earthquakes-stats-sidebar {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    order: 3;
+    transform: none !important;
+    opacity: 1 !important;
+    overflow-x: auto;
+    overflow-y: visible;
+    box-shadow: none;
+    z-index: 1;
+    background: white;
+  }
+
+  .earthquakes-layout.stats-closed .earthquakes-stats-sidebar {
+    display: none;
+  }
+
+  .earthquakes-layout.stats-closed .earthquakes-stats-sidebar > * {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .title {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .title h2 {
+    margin: 0 0 0.75rem 0;
+    padding-left: 0;
+    font-size: 1.6rem;
+    line-height: 1.2;
+    white-space: normal;
+  }
+
+  .title-buttons {
+    justify-content: center;
+    padding-right: 0;
+    flex-wrap: wrap;
+  }
+
+  .search-button,
+  .reset-button {
+    padding: 0.6rem 0.9rem;
+    font-size: 1rem;
+  }
+
+  /* Filters scroll horizontally on small screens */
+  .filters-grid {
+    display: grid;
+    grid-template-columns: 60px 155px 125px 125px 125px 125px;
+    gap: 0.5rem;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    box-sizing: border-box;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filters-grid > div {
+    min-width: 0;
+  }
+
+  .filter-header {
+    font-size: 0.85rem;
+  }
+
+  .earthquakes-contents {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .earthquakes-list table {
+    width: 720px;
+    min-width: 720px;
+    min-height: 0;
+  }
+
+  .earthquakes-list th,
+  .earthquakes-list td {
+    padding: 0.65rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .toggle-sidebar-button,
+  .toggle-stats-sidebar-button {
+    position: absolute;
+    left: 0.75rem;
+    z-index: 1000;
+    font-size: 0.85rem;
+    padding: 0.45rem 0.6rem;
+  }
+
+  .toggle-sidebar-button {
+    top: 0.75rem;
+  }
+
+  .toggle-stats-sidebar-button {
+    top: 3.25rem;
+  }
+
+  .leaflet-control-zoom {
+    margin-top: 0.75rem !important;
+  }
+
+  .status-overlay {
+    width: calc(100% - 2rem);
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+
+  .status-overlay p {
+    font-size: 1rem;
+  }
+
+  input,
+  button {
+    font-size: 16px;
+  }
+}
+
 
