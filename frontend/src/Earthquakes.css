@@ -2,6 +2,11 @@ body {
   background-color: #f1eded;
   margin: 0;
   overflow: hidden;
+  color: #2c3e50;
+}
+
+:root {
+  color-scheme: light;
 }
 
 /* === Layout === */
@@ -273,6 +278,21 @@ body {
   border-color: #aaa;
 }
 
+input,
+select,
+textarea {
+  background-color: #ffffff;
+  color: #2c3e50;
+  border: 1px solid #aaa;
+  color-scheme: light;
+}
+
+input[type="text"],
+input[type="number"] {
+  background-color: #ffffff;
+  color: #2c3e50;
+}
+
 /* ==============================
    Mobile layout
    ============================== */
@@ -282,10 +302,15 @@ body {
   body,
   #root {
     width: 100%;
+    max-width: 100%;
     min-height: 100%;
     margin: 0;
+    padding: 0;
     overflow-x: hidden;
     overflow-y: auto;
+    background-color: #f1eded;
+    color: #2c3e50;
+    color-scheme: light;
   }
 
   body {
@@ -297,6 +322,7 @@ body {
     display: flex;
     flex-direction: column;
     width: 100%;
+    max-width: 100vw;
     min-width: 0;
     height: auto;
     min-height: 100vh;
@@ -304,22 +330,23 @@ body {
     overflow-y: auto;
   }
 
-  /* Reset desktop absolute sidebar behavior */
   .earthquakes-list {
     position: relative;
     top: auto;
     left: auto;
     width: 100%;
-    max-width: 100%;
+    max-width: 100vw;
     min-width: 0;
     height: auto;
     max-height: none;
     order: 1;
     transform: none !important;
     opacity: 1 !important;
-    overflow: visible;
+    overflow: hidden;
     box-shadow: none;
     z-index: 1;
+    background-color: #ffffff;
+    color: #2c3e50;
   }
 
   .earthquakes-layout.sidebar-closed .earthquakes-list {
@@ -331,11 +358,10 @@ body {
     pointer-events: auto;
   }
 
-  /* Map becomes a normal section, not a full-screen background */
   .earthquakes-map {
     position: relative;
     width: 100%;
-    max-width: 100%;
+    max-width: 100vw;
     height: 45vh;
     min-height: 360px;
     order: 2;
@@ -346,13 +372,12 @@ body {
     display: none;
   }
 
-  /* Stats becomes a normal mobile section */
   .earthquakes-stats-sidebar {
     position: relative;
     top: auto;
     left: auto;
     width: 100%;
-    max-width: 100%;
+    max-width: 100vw;
     height: auto;
     order: 3;
     transform: none !important;
@@ -361,7 +386,8 @@ body {
     overflow-y: visible;
     box-shadow: none;
     z-index: 1;
-    background: white;
+    background-color: #ffffff;
+    color: #2c3e50;
   }
 
   .earthquakes-layout.stats-closed .earthquakes-stats-sidebar {
@@ -376,7 +402,7 @@ body {
   .title {
     display: block;
     width: 100%;
-    padding: 0.75rem;
+    padding: 1rem 0.75rem;
     margin-bottom: 0.5rem;
     box-sizing: border-box;
     text-align: center;
@@ -385,37 +411,40 @@ body {
   .title h2 {
     margin: 0 0 0.75rem 0;
     padding-left: 0;
-    font-size: 1.6rem;
+    font-size: 1.7rem;
     line-height: 1.2;
     white-space: normal;
+    color: #2c3e50;
   }
 
   .title-buttons {
+    display: flex;
     justify-content: center;
     padding-right: 0;
     flex-wrap: wrap;
+    gap: 0.75rem;
   }
 
   .search-button,
   .reset-button {
-    padding: 0.6rem 0.9rem;
+    padding: 0.65rem 1rem;
     font-size: 1rem;
   }
 
-  /* Filters scroll horizontally on small screens */
   .filters-grid {
     display: grid;
-    grid-template-columns: 60px 155px 125px 125px 125px 125px;
+    grid-template-columns: 50px 150px 110px 110px 110px 110px;
     gap: 0.5rem;
     align-items: center;
     width: 100%;
-    max-width: 100%;
+    max-width: 100vw;
     margin-bottom: 0.75rem;
     padding: 0.75rem;
     box-sizing: border-box;
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
+    background-color: #ffffff;
   }
 
   .filters-grid > div {
@@ -423,28 +452,65 @@ body {
   }
 
   .filter-header {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    color: #2c3e50;
   }
 
   .earthquakes-contents {
     width: 100%;
-    max-width: 100%;
+    max-width: 100vw;
     overflow-x: auto;
     overflow-y: visible;
     -webkit-overflow-scrolling: touch;
+    background-color: #ffffff;
   }
 
   .earthquakes-list table {
-    width: 720px;
-    min-width: 720px;
+    width: 680px;
+    min-width: 680px;
     min-height: 0;
+    color: #2c3e50;
+    background-color: #ffffff;
   }
 
   .earthquakes-list th,
   .earthquakes-list td {
     padding: 0.65rem;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     white-space: nowrap;
+    color: #2c3e50;
+    background-color: #ffffff;
+  }
+
+  .earthquakes-list th {
+    background-color: #d2d18d;
+    color: #2c3e50;
+  }
+
+  .earthquakes-list tr:hover td {
+    background-color: #ebe8e8;
+    color: #2c3e50;
+  }
+
+  input,
+  select,
+  textarea {
+    background-color: #ffffff !important;
+    color: #2c3e50 !important;
+    border: 1px solid #aaa;
+    color-scheme: light;
+    -webkit-text-fill-color: #2c3e50;
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    background-color: #ffffff !important;
+    color: #2c3e50 !important;
+    -webkit-text-fill-color: #2c3e50;
+  }
+
+  button {
+    color-scheme: light;
   }
 
   .toggle-sidebar-button,
@@ -476,11 +542,6 @@ body {
 
   .status-overlay p {
     font-size: 1rem;
-  }
-
-  input,
-  button {
-    font-size: 16px;
   }
 }
 

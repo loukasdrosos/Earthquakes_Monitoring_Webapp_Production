@@ -73,3 +73,21 @@
   z-index: 9999;
   position: absolute !important;
 }
+
+.react-datepicker-wrapper,
+.react-datepicker__input-container,
+.react-datepicker__input-container input {
+  width: 100%;
+}
+
+.react-datepicker__input-container input {
+  background-color: #ffffff;
+  color: #2c3e50;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+.react-datepicker__input-container input {
+  color-scheme: light;
+  -webkit-text-fill-color: #2c3e50;
+}
